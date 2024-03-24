@@ -1,9 +1,10 @@
 package com.testrun.manager.repository
 
-import com.testrun.manager.model.Project
+import com.testrun.manager.model.Scenario
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.stereotype.Repository
 
+
 @Repository
-interface ProjectRepository: ReactiveMongoRepository<Project, String> {
+interface ScenarioRepository: ReactiveMongoRepository<Scenario, String> {
 }
