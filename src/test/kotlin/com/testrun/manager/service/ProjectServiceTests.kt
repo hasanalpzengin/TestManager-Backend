@@ -24,10 +24,33 @@ class ProjectServiceTests : FunSpec() {
         extension(SpringExtension)
 
         test("add suite to project") {
-            val expectedProject = Project("someProjectId", "this is the project", mutableListOf(Suite("suiteName", listOf("someTag"), emptyList())))
-            given(projectRepositoryMock.findById("someProjectId")).willReturn(Mono.just(Project("someProjectId", "this is the project", mutableListOf())))
-            given(projectRepositoryMock.save(Project("someProjectId", "this is the project", mutableListOf(Suite("suiteName", listOf("someTag"), emptyList()))))).willReturn(Mono.just(expectedProject))
-            val value = projectService.addSuiteToProject("someProjectId", Suite("suiteName", listOf("someTag"), emptyList()))
+            /* expected */
+            val expectedProject = Project(
+                "someProjectId",
+                "this is the project",
+                mutableListOf(Suite("suiteId", "suiteName", listOf("someTag"), emptyList()))
+            )
+            /* prepare mock */
+            given(
+                projectRepositoryMock.findById("someProjectId")
+            ).willReturn(
+                Mono.just(Project("someProjectId", "this is the project", mutableListOf()))
+            )
+            given(
+                projectRepositoryMock.save(
+                    Project(
+                        "someProjectId",
+                        "this is the project",
+                        mutableListOf(Suite("suiteId", "suiteName", listOf("someTag"), emptyList()))
+                    )
+                )
+            ).willReturn(
+                Mono.just(expectedProject)
+            )
+            /* test */
+            val value = projectService.addSuiteToProject(
+                "someProjectId", Suite("suiteId", "suiteName", listOf("someTag"), emptyList())
+            )
             value.block() shouldBe expectedProject
         }
     }
