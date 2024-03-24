@@ -13,45 +13,39 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import reactor.core.publisher.Mono
 
 @SpringBootTest(classes = [ProjectService::class])
-class ProjectServiceTests : FunSpec() {
-    @MockBean
-    lateinit var projectRepositoryMock: ProjectRepository
+class ProjectServiceTests(
+    @MockBean private val projectRepositoryMock: ProjectRepository,
+    @Autowired private val projectService: ProjectService
+) : FunSpec({
 
-    @Autowired
-    private lateinit var projectService: ProjectService
-
-    init {
-        extension(SpringExtension)
-
-        test("add suite to project") {
-            /* expected */
-            val expectedProject = Project(
-                "someProjectId",
-                "this is the project",
-                mutableListOf(Suite("suiteId", "suiteName", listOf("someTag"), emptyList()))
-            )
-            /* prepare mock */
-            given(
-                projectRepositoryMock.findById("someProjectId")
-            ).willReturn(
-                Mono.just(Project("someProjectId", "this is the project", mutableListOf()))
-            )
-            given(
-                projectRepositoryMock.save(
-                    Project(
-                        "someProjectId",
-                        "this is the project",
-                        mutableListOf(Suite("suiteId", "suiteName", listOf("someTag"), emptyList()))
-                    )
+    test("add suite to project") {
+        /* expected */
+        val expectedProject = Project(
+            "someProjectId",
+            "this is the project",
+            mutableListOf(Suite("suiteId", "suiteName", listOf("someTag"), emptyList()))
+        )
+        /* prepare mock */
+        given(
+            projectRepositoryMock.findById("someProjectId")
+        ).willReturn(
+            Mono.just(Project("someProjectId", "this is the project", mutableListOf()))
+        )
+        given(
+            projectRepositoryMock.save(
+                Project(
+                    "someProjectId",
+                    "this is the project",
+                    mutableListOf(Suite("suiteId", "suiteName", listOf("someTag"), emptyList()))
                 )
-            ).willReturn(
-                Mono.just(expectedProject)
             )
-            /* test */
-            val value = projectService.addSuiteToProject(
-                "someProjectId", Suite("suiteId", "suiteName", listOf("someTag"), emptyList())
-            )
-            value.block() shouldBe expectedProject
-        }
+        ).willReturn(
+            Mono.just(expectedProject)
+        )
+        /* test */
+        val value = projectService.addSuiteToProject(
+            "someProjectId", Suite("suiteId", "suiteName", listOf("someTag"), emptyList())
+        )
+        value.block() shouldBe expectedProject
     }
-}
+})
