@@ -1,6 +1,5 @@
 package com.testrun.manager.controller
 
-import com.testrun.manager.model.Scenario
 import com.testrun.manager.model.Suite
 import com.testrun.manager.service.SuiteService
 import org.springframework.web.bind.annotation.*
@@ -15,18 +14,23 @@ class SuiteController(private val suiteService: SuiteService) {
         return suiteService.createSuite(suite)
     }
 
+    @GetMapping("/{suiteId}")
+    fun getSuite(@PathVariable suiteId: String): Mono<Suite> {
+        return suiteService.getSuite(suiteId)
+    }
+
     @GetMapping
-    fun getAllSuites(): Flux<Scenario> {
+    fun getAllSuites(): Flux<Suite> {
         return suiteService.getAllSuites()
     }
 
     @PutMapping("/{suiteId}")
-    fun updateScenario(@PathVariable suiteId: String, @RequestBody suite: Suite): Mono<Suite> {
+    fun updateSuite(@PathVariable suiteId: String, @RequestBody suite: Suite): Mono<Suite> {
         return suiteService.updateSuite(suiteId, suite)
     }
 
     @PutMapping("/{suiteId}")
-    fun updateScenario(@PathVariable suiteId: String): Mono<Void> {
+    fun updateSuite(@PathVariable suiteId: String): Mono<Void> {
         return suiteService.deleteSuite(suiteId)
     }
 }

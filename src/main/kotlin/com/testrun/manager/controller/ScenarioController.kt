@@ -1,9 +1,6 @@
 package com.testrun.manager.controller
 
-import com.testrun.manager.model.Project
 import com.testrun.manager.model.Scenario
-import com.testrun.manager.model.Step
-import com.testrun.manager.model.Suite
 import com.testrun.manager.service.ScenarioService
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
